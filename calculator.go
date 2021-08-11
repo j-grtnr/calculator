@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"os"
 	"strconv"
@@ -11,38 +12,42 @@ import (
 func main() {
 
 	var (
-		a         int
-		b         int
+		inputs    []string
+		operandA  int
+		operandB  int
 		operation string
+		result    int
+		err       error
 	)
 
-	inputs := strings.Split(os.Args[1], " ")
-
-	a, _ = strconv.Atoi(inputs[0])
+	if len(os.Args) != 2 {
+		log.Fatal("Wrong number of command line arguments. Example usage: ./calculator \"1 + 1\"")
+	}
+	inputs = strings.Fields(os.Args[1])
+	operandA, err = strconv.Atoi(inputs[0])
+	if err != nil {
+		log.Fatal(err)
+	}
 	operation = inputs[1]
-	b, _ = strconv.Atoi(inputs[2])
-
-	var result int
+	operandB, err = strconv.Atoi(inputs[2])
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	switch operation {
 	case "+":
-		result = a + b
-		break
+		result = operandA + operandB
 	case "-":
-		result = a - b
-		break
+		result = operandA - operandB
 	case "*":
-		result = a * b
-		break
+		result = operandA * operandB
 	case "/":
-		result = a / b
-		break
+		result = operandA / operandB
 	case "**":
-		res := math.Pow(float64(a), float64(b))
+		res := math.Pow(float64(operandA), float64(operandB))
 		result = int(res)
-		break
 	default:
-		fmt.Printf("Invalid Operation: %s", operation)
+		log.Fatal("Invalid operation.")
 	}
 
 	fmt.Println(result)
